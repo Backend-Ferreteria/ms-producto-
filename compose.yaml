@@ -1,0 +1,32 @@
+services:
+  db-producto:
+    image: postgres:16-alpine
+    container_name: db-producto
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata_producto:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  ms-producto:
+    build: .
+    container_name: ms-producto
+    ports:
+      - "127.0.0.1:8862:8862"
+    environment:
+      SERVER_PORT: 8862
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db-producto:5432/${POSTGRES_DB}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+    depends_on:
+      db-producto:
+        condition: service_healthy
+
+volumes:
+  pgdata_producto:
