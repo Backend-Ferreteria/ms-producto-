@@ -21,7 +21,7 @@ public class Producto {
     @Column(nullable = false, length = 50)
     private String categoria;
 
-    @Column(nullable = false, length = 50)
+    @Column(length = 50)
     private String subCategoria;
 
     @Column(nullable = false, length = 100)
@@ -31,10 +31,10 @@ public class Producto {
     private String marca;
 
     // "Saco", "Galón", "Unidad"
-    @Column(nullable = false, length = 50)
+    @Column(length = 50)
     private String unidad;
 
-    @Column(name = "precio_compra", nullable = false)
+    @Column(name = "precio_compra")
     private Double precioCompra;
 
     @Column(name = "precio_venta", nullable = false)
@@ -43,8 +43,17 @@ public class Producto {
     @Column(nullable = false)
     private Integer stock;
 
-    @Column(name = "stock_minimo", nullable = false)
+    @Column(name = "stock_minimo")
     private Integer stockMinimo;
+
+    @Column(length = 100)
+    private String provider;
+
+    @Column(name = "discount_percent")
+    private Double discountPercent;
+
+    @Column(length = 2000)
+    private String description;
 
 
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
